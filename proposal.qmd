@@ -19,11 +19,11 @@ A brief description of your dataset including its provenance, dimensions, etc. a
 Make sure to load the data and use inline code for some of this information.
 
 ```{r}
-#| load-data
+#| label: load-data
 
-breed_traits <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/breed_traits.csv')
-trait_description <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/trait_description.csv')
-breed_rank_all <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/breed_rank.csv')
+breed_traits <- read_csv("data/breed_traits.csv")
+trait_description <- read_csv("data/trait_description.csv")
+breed_rank <- read_csv("data/breed_rank.csv")
 ```
 
 # Questions
