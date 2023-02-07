@@ -3,16 +3,16 @@ title: "Project 1: Visualizing How Dog Breed Traits Contribute to Popularity Ran
 subtitle: "Proposal"
 format: html
 editor: visual
+author: Anna Zolotor, Alyssa Shi, Eddie Chen, Othmane Bahraoui
 ---
 
 ```{r}
 #| label: load-pkgs
 #| message: false
+#| warning: false
 
 library(tidyverse)
 ```
-
-Anna Zolotor, Alyssa Shi, Eddie Chen, Othmane Bahraoui
 
 # Dataset
 
@@ -35,7 +35,7 @@ Many of our group members own dogs or are dog lovers, so we were interested in a
 
 # Questions
 
-1.  How have the ten overall most popular breeds across all years of the dataset fluctuated in popularity throughout these yars, and how is coat type related to the popularity of these particular breeds?
+1.  How have the ten overall most popular breeds across all years of the dataset fluctuated in popularity throughout these years, and how is coat type related to the popularity of these particular breeds?
 
 2.  In 2020, what are some of the dog personality traits that are associated with being the most and least popular breeds?
 
