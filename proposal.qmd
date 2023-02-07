@@ -12,6 +12,8 @@ editor: visual
 library(tidyverse)
 ```
 
+Anna Zolotor, Alyssa Shi, Eddie Chen, Othmane Bahraoui
+
 # Dataset
 
 ```{r}
