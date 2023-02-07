@@ -24,17 +24,20 @@ breed_rank_all <- read_csv("data/breed_rank_all.csv")
 
 ## Description of data
 
-The data for this project comes from the American Kennel Club and was cleaned and compiled by Github user 'kkakey'. The American Kennel Club is a registry of purebred dog breeds in the United States which also promotes events including the National Dog Show. The dataset contains three separate files. The first file, `breed_traits,` contains `r nrow(breed_traits)` rows and ` r ncol(breed_traits)` columns. This dataset contains information about the personality and physical traits of ` r nrow(breed_traits)` different dog breeds. Most of these traits are ranked from 1-5, while a few have character string labels. The second file, `trait_description`, is `r nrow(trait_description)` rows by `r nrow(trait_description)` columns and contains further information about each of the traits referenced in the `breed_traits` file, including an explanation of the upper and lower values of the 1-5 ranking system used in that dataset. The third file, `breed_rank_all`, contains `r nrow(breed_rank_all`) rows and `r ncol(breed_rank_all`) columns and contain's each breed's popularity ranking from 2013-2020, as well as a link to each breed's AKC webpage and a link to an image of the breed. 
+The data for this project comes from the American Kennel Club and was cleaned and compiled by Github user 'kkakey'. The American Kennel Club is a registry of purebred dog breeds in the United States which also promotes events including the National Dog Show. The dataset contains three separate files. The first file, `breed_traits,` contains `r nrow(breed_traits)` rows and `r ncol(breed_traits)` columns. This dataset contains information about the personality and physical traits of `r nrow(breed_traits)` different dog breeds. Most of these traits are ranked from 1-5, while a few have character string labels. The second file, `trait_description`, is `r nrow(trait_description)` rows by `r nrow(trait_description)` columns and contains further information about each of the traits referenced in the `breed_traits` file, including an explanation of the upper and lower values of the 1-5 ranking system used in that dataset. The third file, `breed_rank_all`, contains `r nrow(breed_rank_all`) rows and `r ncol(breed_rank_all`) columns and contain's each breed's popularity ranking from 2013-2020, as well as a link to each breed's AKC webpage and a link to an image of the breed.
 
-## Why we choose the dataset 
+## Why we choose the dataset
 
-Many of our group members own dogs or are dog lovers, so we were interested in analyzing data related to dog traits and popularity. Additionally, there is a good mix of categorical (coat type, coat length, etc.) and numerical variables (shedding level, coat grooming frequency, etc.) to work with. Finally, the data allows us to investigate dog popularity both in a specific year and over time (from 2013-2022), broadening the type of visualizations we can make with this dataset. 
+Many of our group members own dogs or are dog lovers, so we were interested in analyzing data related to dog traits and popularity. Additionally, there is a good mix of categorical (coat type, coat length, etc.) and numerical variables (shedding level, coat grooming frequency, etc.) to work with. Finally, the data allows us to investigate dog popularity both in a specific year and over time (from 2013-2022), broadening the type of visualizations we can make with this dataset.
 
 # Questions
 
-1. How have the ten overall most popular breeds across all years of the dataset fluctuated in popularity throughout these yars, and how is coat type related to the popularity of these particular breeds?
+1.  How have the ten overall most popular breeds across all years of the dataset fluctuated in popularity throughout these yars, and how is coat type related to the popularity of these particular breeds?
 
-2. In 2020, which dog personality traits were most associated with being the least popular breed?  
+2.  In 2020, which dog personality traits were most associated with being the least popular breed?
+
+To answer this question, we will compare trait ratings for the 10 most popular breeds and the 10 least popular breeds. The 20 dog breeds will represent the y-axis labels, ordered from most popular to least popular. The x-axis will range from 1-5, and we will use varying shapes and colors to represent different traits. In this visualization, we will mainly focus on quantitative variables, which include how affectionate a breed is, how good the breed is with children and other dogs, shedding level, etc. Y-axis grid lines will be visible, and the ratings for traits will be plotted for each dog breed on its respective line. Overall, this visualization will help shed light on whether popular dog breeds have certain traits that are rated higher than unpopular breeds. 
+
 
 # Analysis plan
 
