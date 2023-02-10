@@ -13,8 +13,10 @@
 `Coat Length`- description of the breed's coat length\
 `Openness To Strangers`- placement on a scale of 1-5\
 `Playfulness Level`- placement on a scale of 1-5\
-`Watchdog/Protective Nature`- placement on a scale of 1-5 `Adaptability Level`-placement on a scale of 1-5\
-`Trainability Level`- placement on a scale of 1-5 `Energy Level`- placement on a scale of 1-5\
+`Watchdog/Protective Nature`- placement on a scale of 1-5\
+`Adaptability Level`-placement on a scale of 1-5\
+`Trainability Level`- placement on a scale of 1-5\
+`Energy Level`- placement on a scale of 1-5\
 `Barking Level`- placement on a scale of 1-5\
 `Mental Stimulation Needs`- placement on a scale of 1-5
 
