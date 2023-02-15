@@ -1,0 +1,32 @@
+---
+title: "Alyssa - Graphs"
+editor: visual
+---
+
+```{r}
+#| label: load-pkgs
+#| message: false
+#| warning: false
+
+library(tidyverse)
+```
+
+## Dataset
+
+```{r}
+#| label: load-data
+#| message: false
+
+breed_traits <- read_csv("data/breed_traits.csv")
+trait_description <- read_csv("data/trait_description.csv")
+breed_rank_all <- read_csv("data/breed_rank.csv")
+```
+
+```{r}
+left_join(breed_traits, breed_rank_all)
+
+breed_traits[1,]
+breed_rank_all[1,]
+
+left_join(breed_traits[1,], breed_rank_all[1,])
+```
