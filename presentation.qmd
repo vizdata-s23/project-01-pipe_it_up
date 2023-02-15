@@ -42,7 +42,9 @@ knitr::opts_chunk$set(
 #| label: load-data
 #| include: false
 
-# Load your data here
+breed_traits <- read_csv("data/breed_traits.csv")
+trait_description <- read_csv("data/trait_description.csv")
+breed_rank_all <- read_csv("data/breed_rank.csv")
 ```
 
 # Using Quarto for presentations
