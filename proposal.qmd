@@ -51,4 +51,4 @@ For our second visualization, we will focus on 5 traits that seemed to be most r
 
 # Source:
 
-Information in the codebook and dataset description is derived from the Tidy Tuesday page: https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-02-01/readme.md.
+Information in the codebook and dataset description is derived from the Tidy Tuesday page: [https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-02-01/readme.md](https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-02-01/readme.md).
