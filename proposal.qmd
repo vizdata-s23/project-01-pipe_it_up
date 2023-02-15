@@ -14,7 +14,7 @@ author: Anna Zolotor, Alyssa Shi, Eddie Chen, Othmane Bahraoui
 library(tidyverse)
 ```
 
-# Dataset
+## Dataset
 
 ```{r}
 #| label: load-data
@@ -25,21 +25,21 @@ trait_description <- read_csv("data/trait_description.csv")
 breed_rank_all <- read_csv("data/breed_rank.csv")
 ```
 
-### Description of data
+#### Description of data
 
 The data for this project comes from the American Kennel Club and was cleaned and compiled by Github user 'kkakey'. The American Kennel Club is a registry of purebred dog breeds in the United States which also promotes events including the National Dog Show. The dataset contains three separate files. The first file, `breed_traits,` contains `r nrow(breed_traits)` rows and `r ncol(breed_traits)` columns. This dataset contains information about the personality and physical traits of `r nrow(breed_traits)` different dog breeds. Most of these traits are ranked from 1-5, while a few have character string labels. The second file, `trait_description`, is `r nrow(trait_description)` rows by `r nrow(trait_description)` columns and contains further information about each of the traits referenced in the `breed_traits` file, including an explanation of the upper and lower values of the 1-5 ranking system used in that dataset. The third file, `breed_rank_all`, contains `r nrow(breed_rank_all)` rows and `r ncol(breed_rank_all)` columns and contains each breed's popularity ranking from 2013-2020, as well as a link to each breed's AKC webpage and a link to an image of the breed.
 
-### Why we choose the dataset
+#### Why we choose the dataset
 
 Many of our group members own dogs or are dog lovers, so we were interested in analyzing data related to dog traits and popularity. Additionally, there is a good mix of categorical (coat type, coat length, etc.) and numerical variables (shedding level, coat grooming frequency, etc.) to work with. Finally, the data allows us to investigate dog popularity both in a specific year and over time (from 2013-2022), broadening the type of visualizations we can make with this dataset.
 
-# Questions
+## Questions
 
 1.  How have the twenty overall most popular breeds across all years of the dataset fluctuated in popularity throughout these years, and how are coat length and coat type related to the popularity of these particular breeds?
 
 2.  In 2020, what are some of the dog personality traits that are associated with being the most and least popular breeds?
 
-# Analysis plan
+## Analysis plan
 
 To answer the first question, we first need to determine the twenty overall most popular dog breeds from 2013-2020. We'll do this by using the `mutate` function to sum across all yearly popularity scores for each breed, as well as `arrange()`, to view the top twenty breeds with the highest mean popularity scores across the years in the dataset, and then we'll filter `breed_rank_all` to contain only those breeds. Next, we'll do a left join on `Breed` between this filtered version of `breed_rank_all` and `breed_traits` filtered to contain only the `Coat Length` variable and the breed names. Our first plot will be a line plot with year on the x-axis and the yearly popularity rankings (`2013 Rank` through `2020 Rank`) on the y-axis. The breeds will be differentiated using color, and while we recognize that the graph may look crowded, the point is to examine whether there has been a lot of fluctuation between the top twenty breeds in recent years/ to identify overall trends. However, if the graph is too crowded to discern breed-to-breed differences, we will consider mutating a variable that assigns the breeds to two or four groups (in order of popularity) and facets by that variable. That way, we would also be able to examine whether there are differences in popularity trends between the top 10 and 11-20 ranked breeds (or 1-5, 6-10, etc.). 
 
@@ -49,6 +49,6 @@ To answer the second question, we will compare trait ratings for the 10 most pop
 
 For our second visualization, we will focus on 5 traits that seemed to be most related to popularity based on the first visualization. If none are found from the first visualization, we will choose traits that we suspect to be related to popularity or lack of popularity (this may require creating several iterations of the plot); for instance, we suspect that a high `Barking Level` may be related to low popularity, while a high score for `Good With Young Children` may be common in the most popular dogs. We will have 20 dog breeds on the y-axis, ordered from most popular to least popular. The x-axis will be labeled from 1-5 and the scores for the traits we have chosen will be plotted for each dog breed on its respective line. While we will experiment with several different aesthetics, the traits will be represented using `geom_point` and a combination of varying shapes and colors to differentiate between traits; there will be a merged legend off to the side. Because of the sheer number of variables provided, we won't be able to determine exactly which traits are most associated with popularity or lack thereof, but we intend to create an interesting, detailed visualization that gives some insight into this question and also provokes more questions in its viewers.
 
-# Source:
+## Source:
 
 Information in the codebook and dataset description is derived from the Tidy Tuesday page: [https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-02-01/readme.md](https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-02-01/readme.md).
