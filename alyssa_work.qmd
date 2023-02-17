@@ -1,5 +1,6 @@
 ---
 title: "Alyssa - Graphs"
+format: html
 editor: visual
 ---
 
@@ -23,10 +24,18 @@ breed_rank_all <- read_csv("data/breed_rank.csv")
 ```
 
 ```{r}
-left_join(breed_traits, breed_rank_all)
+# breed_traits %>%
+#   arrange(Breed)
+# 
+# breed_rank_all %>%
+#   arrange(Breed)
+# 
 
-breed_traits[1,]
-breed_rank_all[1,]
+colnames(breed_rank_all)[1] ="breed2"
 
-left_join(breed_traits[1,], breed_rank_all[1,])
+cbind(breed_rank_all, breed_traits) %>%
+  select(breed2, Breed)
+  
 ```
+
+
