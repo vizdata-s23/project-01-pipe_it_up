@@ -1,0 +1,58 @@
+---
+title: "Anna work"
+editor: visual
+---
+
+# Introduction 
+
+```{r}
+# plot 1
+library(tidyverse)
+library(tidyr)
+library(gghighlight)
+library(directlabels)
+library(lubridate)
+
+breed_traits <- read_csv("data/breed_traits.csv")
+trait_description <- read_csv("data/trait_description.csv")
+breed_rank_all <- read_csv("data/breed_rank.csv")
+```
+
+```{r}
+breed_traits <- breed_traits %>%
+  mutate(breed = Breed) %>%
+  select(-c(Breed))
+
+comb_df <- bind_cols(breed_traits, breed_rank_all) %>% select(-c(breed)) %>% relocate(Breed)
+```
+
+```{r}
+t20 <- breed_rank_all %>%
+  tidyr::drop_na() %>%
+  mutate(popsum = rowSums(across(where(is.numeric)), na.rm=TRUE)) %>%
+  arrange(popsum) %>%
+  head(20)
+```
+
+```{r}
+comb_df20 <- comb_df %>%
+  filter(Breed %in% t20$Breed) %>%
+  pivot_longer(cols = c(`2013 Rank`:`2020 Rank`), names_to = "Year",  values_to = "rank")%>% mutate(Year = as.numeric(str_replace_all(Year, " Rank", "")), rank = as.numeric(rank)) 
+```
+
+```{r}
+comb_df20 %>%
+  group_by(Breed) %>%
+  mutate(range = (max(rank)- min(rank)), .groups  = "drop") %>%
+  ggplot(aes(x = Year, y = rank, color = Breed)) + 
+  scale_x_continuous(limits = c(2013,2022), labels = c(2013:2022), breaks = c(2013:2022)) + 
+  geom_line(show.legend = FALSE) + 
+  geom_dl(aes(label = Breed), method = list("last.points", cex = 0.65)) +
+  theme_minimal() +
+  scale_y_reverse() +
+  gghighlight(max(range) >6, use_direct_label = FALSE, unhighlighted_params = list(linewidth = 0.5, colour = alpha("slategray", 0.7))) +
+  labs(title = "Popularity Rankings of 20 Top Dog Breeds Over Time", x = "Year", y = "Rank") + 
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank())
+```
+
+"
