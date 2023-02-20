@@ -18,24 +18,53 @@ library(tidyverse)
 #| label: load-data
 #| message: false
 
-breed_traits <- read_csv("data/breed_traits.csv")
+breed_traits <- read_csv("data/breed_traits.csv") %>%
+  select(-Breed)
 trait_description <- read_csv("data/trait_description.csv")
 breed_rank_all <- read_csv("data/breed_rank.csv")
+
+breed_full <- cbind(breed_rank_all, breed_traits)
 ```
 
 ```{r}
-# breed_traits %>%
-#   arrange(Breed)
-# 
-# breed_rank_all %>%
-#   arrange(Breed)
-# 
-
-colnames(breed_rank_all)[1] ="breed2"
-
-cbind(breed_rank_all, breed_traits) %>%
-  select(breed2, Breed)
-  
+lollipop_data <- breed_full %>%
+  filter((`2020 Rank` > 0 & `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
+  select(-`2013 Rank`, -`2014 Rank`, -`2015 Rank`, -`2016 Rank`, -`2017 Rank`, -`2018 Rank`, -`2019 Rank`) %>%
+  mutate(popularity = case_when(`2020 Rank` <= 10 ~ "Popular", 
+                                `2020 Rank` >= 186 ~ "Unpopular")) %>%
+  select(-`2020 Rank`, -links, -Image, -`Coat Type`, -`Coat Length`) %>%
+  pivot_longer(is.numeric, names_to = "Trait", values_to = "Score") %>%
+  group_by(popularity, Trait) %>%
+  summarize(`Mean Score` = mean(Score), 
+            `SD Score` = sd(Score), 
+            `Median Score` = median(Score), 
+            `Max Score` = max(Score), 
+            `Min Score` = min(Score))
 ```
+
+```{r}
+ggplot(lollipop_data, mapping = aes(x = `Mean Score`, y = Trait, color = popularity)) +
+  geom_errorbarh(aes(xmin = 0, xmax = `Mean Score`),
+                   height = 0,
+                   position = position_dodge(width = .5)) +
+  geom_point(position = position_dodge(width = .5)) +
+  geom_errorbar(aes(xmin = (`Mean Score` - `SD Score`), xmax = (`Mean Score` + `SD Score`)),
+                position = position_dodge(width = .5)) 
+```
+
+```{r}
+lollipop_data %>%
+  pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
+  ggplot(., mapping = aes(y = Trait)) +
+  geom_segment(aes(x = `Mean Score_Unpopular`, xend = `Mean Score_Popular`, y = Trait, yend = Trait)) +
+  geom_point(aes(x = `Mean Score_Unpopular`, y = Trait), color = "red") +
+  geom_point(aes(x = `Mean Score_Popular`, y = Trait), color = "green") +
+  geom_errorbar(aes(xmin = (`Mean Score_Unpopular` - `SD Score_Unpopular`), xmax = (`Mean Score_Unpopular` + `SD Score_Unpopular`)), color = "red", alpha = 0.4) +
+  geom_errorbar(aes(xmin = (`Mean Score_Popular` - `SD Score_Popular`), xmax = (`Mean Score_Popular` + `SD Score_Popular`)), color = "green", alpha = 0.4)
+```
+
+
+
+
 
 
