@@ -102,7 +102,7 @@ lollipop_data %>%
   geom_point(aes(x = `Mean Score_Popular`, y = Trait, color = "Popular")) +
   scale_color_manual(values = colors) +
   labs(title = "Average Breed Trait Scores for Popular and Unpopular Dogs", 
-       subtitle = "Based on 2020 Popularity Rankings, Ordered by Difference Between Popular and Unpopular Dogs", 
+       subtitle = "Based on 2020 Popularity Rankings", 
        y = "Breed Trait",
        x = "Average Score",
        color = "Popularity") +

@@ -42,9 +42,11 @@ knitr::opts_chunk$set(
 #| label: load-data
 #| include: false
 
-breed_traits <- read_csv("data/breed_traits.csv")
+breed_traits <- read_csv("data/breed_traits.csv") %>%
+  select(-Breed)
 trait_description <- read_csv("data/trait_description.csv")
 breed_rank_all <- read_csv("data/breed_rank.csv")
+breed_full <- cbind(breed_rank_all, breed_traits)
 ```
 
 # Using Quarto for presentations
@@ -92,35 +94,47 @@ glance(model)
 ## Plots
 
 ```{r}
-#| label: recode-species
+#| label: lollipop-wrangling
 #| echo: false
 
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
+lollipop_data <- breed_full %>%
+  filter((`2020 Rank` > 0 & `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
+  select(-`2013 Rank`, -`2014 Rank`, -`2015 Rank`, -`2016 Rank`, -`2017 Rank`, -`2018 Rank`, -`2019 Rank`) %>%
+  mutate(popularity = case_when(`2020 Rank` <= 10 ~ "Popular", 
+                                `2020 Rank` >= 186 ~ "Unpopular")) %>%
+  select(-`2020 Rank`, -links, -Image, -`Coat Type`, -`Coat Length`) %>%
+  pivot_longer(is.numeric, names_to = "Trait", values_to = "Score") %>%
+  group_by(popularity, Trait) %>%
+  summarize(`Mean Score` = mean(Score), 
+            `SD Score` = sd(Score), 
+            `Median Score` = median(Score), 
+            `Max Score` = max(Score), 
+            `Min Score` = min(Score))
 
-penguins_modified <- penguins %>%
-  mutate(species = fct_other(species, keep = "Adelie"))
+colors <- c("Unpopular" = "#E97451", "Popular" = "#8ABD91")
 ```
 
 ```{r}
-#| label: plot-penguins
+#| label: plot-lollipop
 #| echo: false
 #| warning: false
 #| fig-alt: |
-#|   Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all 
-#|   the others combined together. There is a relatively strong, positive 
-#|   relationship between the two variables. The Adelie penguins are clustered 
-#|   together but they don't exhibit a different trend than the rest of the 
-#|   penguins.
+#|   Differences in Breed Traits Between Popular and Unpopular Dogs
 
-# Uses modified penguins dataset from previous chunk
-# Play around with height and width until you're happy with the look
-
-ggplot(
-  penguins_modified, 
-  aes(x = flipper_length_mm, y = body_mass_g, color = species)
-  ) +
-  geom_point() + 
+lollipop_data %>%
+  pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
+  mutate(Trait = factor(Trait, levels = c("Trainability Level", "Playfulness Level", "Openness To Strangers", "Drooling Level", "Watchdog/Protective Nature", "Adaptability Level", "Mental Stimulation Needs", "Affectionate With Family", "Coat Grooming Frequency", "Good With Young Children", "Shedding Level", "Energy Level", "Good With Other Dogs", "Barking Level")), 
+         Trait = fct_rev(Trait)) %>%
+  ggplot(., mapping = aes(y = Trait)) +
+  geom_segment(aes(x = `Mean Score_Unpopular`, xend = `Mean Score_Popular`, y = Trait, yend = Trait), color = "darkgrey") +
+  geom_point(aes(x = `Mean Score_Unpopular`, y = Trait, color = "Unpopular")) +
+  geom_point(aes(x = `Mean Score_Popular`, y = Trait, color = "Popular")) +
+  scale_color_manual(values = colors) +
+  labs(title = "Average Breed Trait Scores for Popular and Unpopular Dogs", 
+       subtitle = "Based on 2020 Popularity Rankings", 
+       y = "Breed Trait",
+       x = "Average Score",
+       color = "Popularity") +
   theme_minimal()
 ```
 
