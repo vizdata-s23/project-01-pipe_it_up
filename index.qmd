@@ -14,13 +14,15 @@ editor: visual
 
 ## Introduction
 
-(1-2 paragraphs): Brief introduction to the dataset. You may repeat some of the information about the dataset provided in the introduction to the dataset on the TidyTuesday repository, paraphrasing on your own terms. Imagine that your project is a standalone document and the grader has no prior knowledge of the dataset.
+The aim of this project is to use The Tidy Tuesday \"Dog Breeds \" data set to visually explore questions about dog breed popularity. The Tidy Tuesday repository contains three datasets taken from the American Kennel Club, which is a registry of purebred dog pedigrees in the United States. One of the three data sets (`breed_rank`) contains information about the popularity rankings of 195 dog breeds each year from 2013 to 2020. The other two data sets (`breed_traits` and `trait_description` contain information about 16 different traits of each breed, as well as a detailed description of each of those traits. Traits described in the data set include physical characteristics like coat length and shedding level, as well as personality traits like playfulness, energy, and trainability. Most of the traits are ranked on a scale from 1-5, with the exception of coat length and coat type. For our analysis, we aimed to use creative data visualizations to explore dog breed popularity, both over time and as it relates to various breed characteristics. 
 
-## Question 1: Title that relates to the question you're answering
+We aimed to answer two major questions. The first was as follows: How have the twenty overall most popular breeds across all years of the data set fluctuated in popularity throughout these years, and how are coat length and coat type related to the popularity of these particular breeds? Answering this question required the use of the year-by-year popularity ranking in the `breed_rank` data set, as well as `Coat Length` and `Coat Type` from the `breed_traits` data set. Our second question was: In 2020, what are some of the dog personality traits that are associated with being the most and least popular breeds? To assess this, we again used the year-by-year breed rankings to determine overall popularity, and then we looked at traits in `breed-traits` that were ranked from 1 through 5 (all traits other than `Coat Length` and `Coat Type`). From there, we selected a subset of traits to explore more deeply in our analysis of the relationship between breed popularity and breed traits. \
+
+## Question 1: Popularity of breeds over time in relation to coat length and type
 
 ### Introduction
 
-(1-2 paragraphs): Introduction to the question and what parts of the dataset are necessary to answer the question. Also discuss why you're interested in this question.
+For the first portion of our analysis, we chose to investigate the fluctuations in popularity of the twenty most popular dog breeds over time and assess whether these changes appeared to be at all related to coat length and type. We were interested in this question because we thought it would be interesting to visualize the extent of year-to-year fluctuations in popularity, and also because we suspected that short-term populations in dog popularity might be more related to observable traits like coat length and type than to personality characteristics. As a specific example, we've all noticed that "doodles," or poodle mixes with curly hair, seem to have become increasingly popular in the last few years. While this data set only contains information on purebred dogs, an increase in poodle popularity could also be a reflection of this trend. This question required the use of `2013 Rank` through `2020 Rank` corresponding to each `Breed` in the `breed_rank` data file. `Breed` was used to join this file to the `breed_traits` file, from which we used `Coat Length` and `Coat Type` in these visualizations.
 
 ### Approach
 
@@ -29,6 +31,59 @@ editor: visual
 ### Analysis
 
 (2-3 code blocks, 2 figures, text/code comments as needed): In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides. You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so. All plots must be made with **ggplot2**. Do not use base R or lattice plotting functions.
+
+```{r}
+#| label: question 1 plot 1
+#| message: false
+#| warning: false
+
+# load packages 
+library(tidyverse)
+library(tidyr)
+library(gghighlight)
+library(directlabels)
+library(lubridate)
+
+#read in data
+breed_traits <- read_csv("data/breed_traits.csv")
+trait_description <- read_csv("data/trait_description.csv")
+breed_rank_all <- read_csv("data/breed_rank.csv")
+
+#rename breed variable to allow column bind
+breed_traits <- breed_traits %>%
+  mutate(breed = Breed) %>%
+  select(-c(Breed))
+
+#use column bind to combine breed traits and rank dataset
+comb_df <- bind_cols(breed_traits, breed_rank_all) %>% select(-c(breed)) %>% relocate(Breed)
+
+#create list of top 20 breeds
+t20 <- breed_rank_all %>%
+  tidyr::drop_na() %>%
+  mutate(popsum = rowSums(across(where(is.numeric)), na.rm=TRUE)) %>%
+  arrange(popsum) %>%
+  head(20)
+
+comb_df %>%
+  #filter for only top 20 years
+  filter(Breed %in% t20$Breed) %>%
+  #pivot so year can be a column in the dataset used for the plot
+  pivot_longer(cols = c(`2013 Rank`:`2020 Rank`), names_to = "Year",  values_to = "rank")%>% mutate(Year = as.numeric(str_replace_all(Year, " Rank", "")), rank = as.numeric(rank))  %>%
+  group_by(Breed) %>%
+  #calculate range to feed to GGhighlight
+  mutate(range = (max(rank)- min(rank)), .groups  = "drop") %>%
+  ggplot(aes(x = Year, y = rank, color = Breed)) + 
+  scale_x_continuous(limits = c(2013,2022), labels = c(2013:2022), breaks = c(2013:2022)) + 
+  geom_line(show.legend = FALSE) + 
+  #label each line with breed name
+  geom_dl(aes(label = Breed), method = list("last.points", cex = 0.65)) +
+  theme_minimal() +
+  #reverse y axis so that lower scores, which indicate higher popularity, will be on top
+  scale_y_reverse() +
+  gghighlight(max(range) >6, use_direct_label = FALSE, unhighlighted_params = list(linewidth = 0.5, colour = alpha("slategray", 0.7))) +
+  labs(title = "Popularity Rankings of 20 Top Dog Breeds Over Time", x = "Year", y = "Rank") + # remove gridlines
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank())
+```
 
 ### Discussion
 
