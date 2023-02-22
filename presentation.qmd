@@ -1,5 +1,5 @@
 ---
-title: "Visualizing the relationship between dog traits and breed popularity"
+title: "Visualizing the Relationship Between Dog Traits and Breed Popularity"
 subtitle: "STA/ISS 313 - Spring 2023 - Project 1"
 author: "Pipe it Up"
 title-slide-attributes:
@@ -56,7 +56,15 @@ breed_full <- cbind(breed_rank_all, breed_traits2)
 
 ## Introduction
 
-## Question 1a: 
+In our presentation we will analyze the Dog Breeds dataset from the American Kennel Club. We will focus on analyzing and visualizing the following aspects:
+
+-   Dog breed popularity over time
+
+-   Coat traits differences between most popular and least popular dog breeds
+
+-   Average dog breed trait scores and trait groups in popular and unpopular dog breeds
+
+## Popularity Ranking of the Top 20 Breeds
 
 ```{r}
 #| label: q1a
@@ -112,7 +120,7 @@ comb_df %>%
   scale_color_viridis_d()
 ```
 
-## Question 1b: 
+## Popularity of Coat Traits in Dog Breeds
 
 ```{r}
 #| label: q1b
@@ -156,11 +164,13 @@ comb_df %>%
   scale_fill_viridis_d(alpha = 0.9)
 ```
 
-## Question 2a: 
+## Average Dog Breed Trait Scores
 
 ```{r}
 #| label: q2a
 #| echo: false
+#| fig.width: 8
+
 lollipop_data <- comb_df %>%
   filter((`2020 Rank` > 0 &
             `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
@@ -186,8 +196,8 @@ lollipop_data <- comb_df %>%
     `Min Score` = min(Score)
   )
 
-colors <- c("Unpopular" = "#E97451",
-            "Popular" = "#8ABD91")
+colors <- c("Unpopular" = "#482677FF",
+            "Popular" = "#20A387FF")
 
 lollipop_data %>%
   pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
@@ -231,14 +241,17 @@ lollipop_data %>%
     x = "Average Score",
     color = "Popularity"
   ) +
+  scale_x_continuous(limits = c(1, 5), breaks = c(1, 2, 3, 4, 5)) +
   theme_minimal()
 ```
 
-## Question 2b:
+## Trait Scores of Different Dog Breeds
 
 ```{r}
 #| label: q2b
 #| echo: false
+#| fig.width: 8
+
 top5_bottom5 <- rbind(comb_df[1:5, ], comb_df[191:195, ])
 top5_bottom5$x <- 5
 top5_bottom5$y <- rev(seq(10:1))
@@ -258,60 +271,66 @@ top5_bottom5 <- top5_bottom5 %>%
            3)
 
 
-ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
+  ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
   geom_col() +
-  geom_segment(aes(
-    x = xbegin,
-    y = y,
-    xend = x,
-    yend = y
-  )) +
-  geom_point(size = 4, aes(
-    x = friendliness,
-    y = y,
-    color = 'pink',
-    shape = 'circle'
-  )) +
+  geom_point(size = 4,
+             aes(
+               x = friendliness,
+               y = y,
+               color = 'Friendliness',
+               shape = 'Friendliness'
+             )) + #dark green
   geom_point(size = 4, aes(
     x = upkeep,
     y = y,
-    color = 'darkorange',
-    shape = 'square'
-  )) +
-  geom_point(size = 4,
-             aes(
-               x = energy,
-               y = y,
-               color = 'steelblue2',
-               shape = 'triangle'
-             )) +
+    color = 'Upkeep',
+    shape = 'Upkeep'
+  )) + #yellow
+  geom_point(size = 4, aes(
+    x = energy,
+    y = y,
+    color = 'Energy',
+    shape = 'Energy'
+  )) + #purple
   geom_point(size = 4,
              aes(
                x = trainability,
                y = y,
-               color = 'tomato',
-               shape = 'diamond'
-             )) +
+               color = 'Trainability',
+               shape = 'Trainability'
+             )) + #light green
   xlim(min = 1, max = 5) +
   scale_alpha(guide = 'none') +
-  labs(title = 'Trait Scores for 5 Most Popular and 5 Least Popular Breeds',
+  labs(title = 'Trait Category Scores for 5 Most Popular and 5 Least Popular Breeds',
        subtitle = 'Based on 2020 Rankings',
        x = 'Score') +
   scale_color_manual(
     name = 'Trait Groups',
+    breaks = c('Friendliness',
+               'Upkeep',
+               'Energy',
+               'Trainability'),
     values = c(
-      'pink' = 'pink',
-             'darkorange' = 'darkorange',
-             'steelblue2' = 'steelblue2',
-             'tomato' = 'tomato'
-    ),
-    labels = c('Friendliness', 'Upkeep', 'Energy', 'Trainability')
+      'Friendliness' = '#2a788e',
+      'Upkeep' = '#fde725',
+      'Energy' = '#440154',
+      'Trainability' = '#7ad151'
+    )
   ) +
   scale_shape_manual(
-    name = "Trait Groups",
-    values = c('circle', 'square', 'triangle', 'diamond'),
-    labels = c('Friendliness', 'Upkeep', 'Energy', 'Trainability')
+    name = 'Trait Category',
+    breaks = c('Friendliness',
+               'Upkeep',
+               'Energy',
+               'Trainability'),
+    values = c(
+      'Friendliness' = 'circle',
+      'Upkeep' = 'square',
+      'Energy' = 'triangle',
+      'Trainability' = 'diamond'
+    )
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
 ```
-

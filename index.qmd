@@ -174,16 +174,15 @@ To answer this question, we focused primarily on traits that are ranked 1-5 in t
 
 Our first plot addressing this question is a variation on a lollipop plot. To make this plot, the top 10 most popular and unpopular dogs of 2020 were identified. Their average trait scores were graphed with color used to differentiate between popular and unpopular dogs. In this plot, the "stem" of the lollipop connects the average trait score between the popular and unpopular breeds. This was done because the focus of this plot was to identify differences in trait scores between popular and unpopular dogs. The length of this stem helps to represent these differences, with longer stems representing greater differences. Additionally, while it was suggested that we include a measure of variance in the plot, it was decided that the error bars cluttered the graph up too much, making it hard to see the differences in trait score.
 
-The second plot shows how traits vary across specific breeds. In this visualization, the 5 most popular and least popular dog breeds of 2020 are . To create this , the 14 traits in the first plot were grouped into four categories: friendliness, upkeep, energy, and trainability. Then, the average of the scores for each of the traits was d. The second plot affirms our initial observations from the first plot that there are large disparities in popular and unpopular dogs when it comes to traits such as trainplayfulness,
-
-
-### Analysis
+The second plot shows how scores for trait categories vary across specific breeds. In this visualization, the 5 most popular and least popular dog breeds of 2020 are spread across the y-axis. Initially, individual traits were plotted for each breed. However, this led to a great deal of overlap in the plot since most traits are scored as a 3, 4, or 5. Thus, to create more variance in the scores, we grouped 14 of the traits into the following categories: friendliness, upkeep, energy, and trainability. The average of the scores in each category was then calculated and plotted for each breed. Each trait category has a distinct shape and color to increase visibility and help distinguish differences in scores.
 
 ```{r}
 #| label: lollipop wrangling
 #| message: false
 #| warning: false
 #| echo: false
+
+#Wrangling
 
 lollipop_data <- comb_df %>%
   filter((`2020 Rank` > 0 &
@@ -210,8 +209,10 @@ lollipop_data <- comb_df %>%
     `Min Score` = min(Score)
   )
 
-colors <- c("Unpopular" = "#E97451",
-            "Popular" = "#8ABD91")
+colors <- c("Unpopular" = "#482677FF",
+            "Popular" = "#20A387FF")
+
+#Graphing!
 
 lollipop_data %>%
   pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
@@ -255,6 +256,7 @@ lollipop_data %>%
     x = "Average Score",
     color = "Popularity"
   ) +
+  scale_x_continuous(limits = c(1, 5), breaks = c(1, 2, 3, 4, 5)) +
   theme_minimal()
 
 ```
@@ -286,61 +288,72 @@ top5_bottom5 <- top5_bottom5 %>%
 
   ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
   geom_col() +
-  geom_segment(aes(
-    x = xbegin,
-    y = y,
-    xend = x,
-    yend = y
-  )) +
-  geom_point(size = 4, aes(
-    x = friendliness,
-    y = y,
-    color = 'pink',
-    shape = 'circle'
-  )) +
+  geom_point(size = 4,
+             aes(
+               x = friendliness,
+               y = y,
+               color = 'Friendliness',
+               shape = 'Friendliness'
+             )) + #dark green
   geom_point(size = 4, aes(
     x = upkeep,
     y = y,
-    color = 'darkorange',
-    shape = 'square'
-  )) +
-  geom_point(size = 4,
-             aes(
-               x = energy,
-               y = y,
-               color = 'steelblue2',
-               shape = 'triangle'
-             )) +
+    color = 'Upkeep',
+    shape = 'Upkeep'
+  )) + #yellow
+  geom_point(size = 4, aes(
+    x = energy,
+    y = y,
+    color = 'Energy',
+    shape = 'Energy'
+  )) + #purple
   geom_point(size = 4,
              aes(
                x = trainability,
                y = y,
-               color = 'tomato',
-               shape = 'diamond'
-             )) +
+               color = 'Trainability',
+               shape = 'Trainability'
+             )) + #light green
   xlim(min = 1, max = 5) +
   scale_alpha(guide = 'none') +
-  labs(title = 'Trait Scores for 5 Most Popular and 5 Least Popular Breeds',
+  labs(title = 'Trait Category Scores for 5 Most Popular and 5 Least Popular Breeds',
        subtitle = 'Based on 2020 Rankings',
        x = 'Score') +
   scale_color_manual(
     name = 'Trait Groups',
+    breaks = c('Friendliness',
+               'Upkeep',
+               'Energy',
+               'Trainability'),
     values = c(
-      'pink' = 'pink',
-             'darkorange' = 'darkorange',
-             'steelblue2' = 'steelblue2',
-             'tomato' = 'tomato'
-    ),
-    labels = c('Friendliness', 'Upkeep', 'Energy', 'Trainability')
+      'Friendliness' = '#2a788e',
+      'Upkeep' = '#fde725',
+      'Energy' = '#440154',
+      'Trainability' = '#7ad151'
+    )
   ) +
   scale_shape_manual(
-    name = "Trait Groups",
-    values = c('circle', 'square', 'triangle', 'diamond'),
-    labels = c('Friendliness', 'Upkeep', 'Energy', 'Trainability')
+    name = 'Trait Groups',
+    breaks = c('Friendliness',
+               'Upkeep',
+               'Energy',
+               'Trainability'),
+    values = c(
+      'Friendliness' = 'circle',
+      'Upkeep' = 'square',
+      'Energy' = 'triangle',
+      'Trainability' = 'diamond'
+    )
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
 ```
 
 ### Discussion
 
-(1-3 paragraphs): In the Discussion section, interpret the results of your analysis. Identify any trends revealed (or not revealed) by the plots. Speculate about why the data looks the way it does.
+Although the process of selecting a dog breed to own is highly subjective and dependent on personal preference, the plots shown above indicate that there are certain traits that are clearly favored over others. From the first plot, which shows differences in average trait scores between the 20 most popular and 20 least popular dogs, we notice that there are large differences in scores for trainability level, playfulness level, openness to strangers, and barking level. Overall, these trends make sense as people generally own dogs for their affection and companionship as opposed to other pets that might be more independent. In addition, many owners may prioritize "family dogs" that are easier to train and like to play with family members. One trend that was a bit surprising was the large gap between average scores for barking level. While it makes sense that barking may be viewed as a nuisance for owners and neighbors, we did not think that barking level was a trait that people were necessarily selecting for when deciding what dog breed to own. From the team's past experiences owning dogs, we hypothesized that people mainly choose breeds based on physical appearance, affection level, and ease of training. However, it may be that dogs that are naturally more friendly and easier to care for also bark less.
+
+Although there were large gaps in scores for some traits, there were also traits where the difference was small to moderate. For example, there appears to be little difference in average scores for coat grooming frequency, tolerance/patience with young children, shedding level, energy level, and friendliness with other dogs. For the most part, these findings are unexpected. For example, our second visualization for the first question suggested that breeds with longer hair have fallen out of favor over time. Usually, breeds with longer hair require more coat grooming, which is why we expected to see greater variation in scores. However, this was not the case. In addition, there is almost no difference in shedding level between popular and unpopular dogs. One explanation for this is that some of the most common dog breeds such as labrador retrievers, German shepherds, and golden retrievers all are known to shed a lot. Finally, it is interesting that openness to strangers and affection with families do not translate to friendliness with other dogs. In fact, the first plot indicates that the least popular dogs are actually more friendly with other dogs than the most popular dogs! Overall, this is confusing, but one explanation could be that the most popular dogs are also more protective in nature, which could lend itself to being less friendly with other dogs.
+
+From the second visualization, we are able to see in more detail how traits for specific breeds are scored as opposed to an average of the top/bottom 10 breeds.
