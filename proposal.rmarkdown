@@ -15,7 +15,9 @@ author: Anna Zolotor, Alyssa Shi, Eddie Chen, Othmane Bahraoui
 library(tidyverse)
 ```
 
+
 ## Dataset
+
 
 ```{r}
 #| label: load-data
@@ -25,6 +27,7 @@ breed_traits <- read_csv("data/breed_traits.csv")
 trait_description <- read_csv("data/trait_description.csv")
 breed_rank_all <- read_csv("data/breed_rank.csv")
 ```
+
 
 #### Description of data
 
@@ -53,3 +56,4 @@ For our second visualization, we will focus on 5 traits that seemed to be most r
 ## Source:
 
 Information in the codebook and dataset description is derived from the following Tidy Tuesday page: <https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-02-01/readme.md>.
+

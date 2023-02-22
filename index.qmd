@@ -108,6 +108,9 @@ comb_df %>%
   theme(panel.grid.minor = element_blank(),
         panel.grid.major = element_blank()) +
   scale_color_viridis_d()
+
+#source for gghighlight: https://cran.r-project.org/web/packages/gghighlight/vignettes/gghighlight.html
+#source for creating labels: https://tdhock.github.io/directlabels/examples.html
 ```
 
 ```{r}
@@ -137,7 +140,7 @@ comb_df %>%
   ) %>%
   ggplot() +
   geom_bar(aes(x = `Coat Type`, fill = `Coat Length`)) +
-  facet_wrap(~ popchange) +
+  facet_wrap( ~ popchange) +
   labs(title = "Coat Traits of Dog Breeds that Increased or Decreased in Popularity",
        subtitle = "From 2013 to 2020",
        y = "Count") +
@@ -186,19 +189,14 @@ The second plot shows how scores for trait categories vary across specific breed
 
 lollipop_data <- comb_df %>%
   filter((`2020 Rank` > 0 &
-            `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
+            `2020 Rank` <= 10) |
+           (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
   select(
-    -`2013 Rank`,
-    -`2014 Rank`,
-    -`2015 Rank`,
-    -`2016 Rank`,
-    -`2017 Rank`,
-    -`2018 Rank`,
-    -`2019 Rank`
+    -`2013 Rank`,-`2014 Rank`,-`2015 Rank`,-`2016 Rank`,-`2017 Rank`,-`2018 Rank`,-`2019 Rank`
   ) %>%
   mutate(popularity = case_when(`2020 Rank` <= 10 ~ "Popular",
                                 `2020 Rank` >= 186 ~ "Unpopular")) %>%
-  select(-`2020 Rank`,-links,-Image,-`Coat Type`,-`Coat Length`) %>%
+  select(-`2020 Rank`, -links, -Image, -`Coat Type`, -`Coat Length`) %>%
   pivot_longer(is.numeric, names_to = "Trait", values_to = "Score") %>%
   group_by(popularity, Trait) %>%
   summarize(
@@ -267,7 +265,7 @@ lollipop_data %>%
 #| warning: false
 #| echo: false
 
-top5_bottom5 <- rbind(comb_df[1:5, ], comb_df[191:195, ])
+top5_bottom5 <- rbind(comb_df[1:5,], comb_df[191:195,])
 top5_bottom5$x <- 5
 top5_bottom5$y <- rev(seq(10:1))
 top5_bottom5$Breed <- as.factor(top5_bottom5$Breed)
