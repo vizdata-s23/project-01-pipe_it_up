@@ -270,7 +270,7 @@ lollipop_data %>%
 top5_bottom5 <- rbind(comb_df[1:5, ], comb_df[191:195, ])
 top5_bottom5$x <- 5
 top5_bottom5$y <- rev(seq(10:1))
-top5_bottom5$xbegin <- 0
+top5_bottom5$Breed <- as.factor(top5_bottom5$Breed)
 
 top5_bottom5 <- top5_bottom5 %>%
   mutate(
@@ -286,7 +286,25 @@ top5_bottom5 <- top5_bottom5 %>%
            3)
 
 
-  ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
+ggplot(top5_bottom5, aes(
+  x = 0,
+  y = fct_rev(fct_relevel(
+    Breed,
+    c(
+      "Retrievers (Labrador)",
+      "French Bulldogs",
+      "German Shepherd Dogs",
+      "Retrievers (Golden)",
+      "Bulldogs",
+      "Cesky Terriers",
+      "American Foxhounds",
+      "Azawakhs",
+      "English Foxhounds",
+      "Norwegian Lundehounds"
+    )
+  )),
+  alpha = 0.5
+)) +
   geom_col() +
   geom_point(size = 4,
              aes(
@@ -316,11 +334,14 @@ top5_bottom5 <- top5_bottom5 %>%
              )) + #light green
   xlim(min = 1, max = 5) +
   scale_alpha(guide = 'none') +
-  labs(title = 'Trait Category Scores for 5 Most Popular and 5 Least Popular Breeds',
-       subtitle = 'Based on 2020 Rankings',
-       x = 'Score') +
+  labs(
+    title = 'Trait Category Scores for 5 Most/Least Popular Breeds',
+    subtitle = 'Based on 2020 Rankings',
+    x = 'Score',
+    y = 'Breed'
+  ) +
   scale_color_manual(
-    name = 'Trait Groups',
+    name = 'Trait Category',
     breaks = c('Friendliness',
                'Upkeep',
                'Energy',
@@ -333,7 +354,7 @@ top5_bottom5 <- top5_bottom5 %>%
     )
   ) +
   scale_shape_manual(
-    name = 'Trait Groups',
+    name = 'Trait Category',
     breaks = c('Friendliness',
                'Upkeep',
                'Energy',
@@ -356,4 +377,6 @@ Although the process of selecting a dog breed to own is highly subjective and de
 
 Although there were large gaps in scores for some traits, there were also traits where the difference was small to moderate. For example, there appears to be little difference in average scores for coat grooming frequency, tolerance/patience with young children, shedding level, energy level, and friendliness with other dogs. For the most part, these findings are unexpected. For example, our second visualization for the first question suggested that breeds with longer hair have fallen out of favor over time. Usually, breeds with longer hair require more coat grooming, which is why we expected to see greater variation in scores. However, this was not the case. In addition, there is almost no difference in shedding level between popular and unpopular dogs. One explanation for this is that some of the most common dog breeds such as labrador retrievers, German shepherds, and golden retrievers all are known to shed a lot. Finally, it is interesting that openness to strangers and affection with families do not translate to friendliness with other dogs. In fact, the first plot indicates that the least popular dogs are actually more friendly with other dogs than the most popular dogs! Overall, this is confusing, but one explanation could be that the most popular dogs are also more protective in nature, which could lend itself to being less friendly with other dogs.
 
-From the second visualization, we are able to see in more detail how traits for specific breeds are scored as opposed to an average of the top/bottom 10 breeds.
+From the second visualization, we are able to see in more detail how traits for specific breeds are scored as opposed to an average of the top/bottom 10 breeds. This plot confirms many of the previously discussed observations from the first plot. We see that labrador retrievers, French bulldogs, and golden retrievers are all rated as friendly breeds. In addition, the top 4 breeds are also highly trainable compared to the bottom 5 breeds. Surprisingly, the more popular breeds on average require more upkeep than unpopular breeds, which could be attributed to their greater drooling levels. One trait that does not seem to be correlated as strongly with popularity is energy level, which varies across the top 5 and bottom 5 breeds.
+
+Overall, Although our visualizations capture many aspects of the decision making process behind owning a dog, there are also factors that it does not consider. For example, one of the most important considerations is the size of the breed. For people living in apartments, this is an especially important trait. In addition, some breeds have specific health complications that are not captured in the data.

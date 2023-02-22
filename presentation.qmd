@@ -11,7 +11,7 @@ editor: visual
 execute:
   echo: false
 ---
- 
+
 ```{r}
 #| label: load-packages
 #| include: false
@@ -273,7 +273,7 @@ lollipop_data %>%
 top5_bottom5 <- rbind(comb_df[1:5, ], comb_df[191:195, ])
 top5_bottom5$x <- 5
 top5_bottom5$y <- rev(seq(10:1))
-top5_bottom5$xbegin <- 0
+top5_bottom5$Breed <- as.factor(top5_bottom5$Breed)
 
 top5_bottom5 <- top5_bottom5 %>%
   mutate(
@@ -289,7 +289,25 @@ top5_bottom5 <- top5_bottom5 %>%
            3)
 
 
-  ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
+ggplot(top5_bottom5, aes(
+  x = 0,
+  y = fct_rev(fct_relevel(
+    Breed,
+    c(
+      "Retrievers (Labrador)",
+      "French Bulldogs",
+      "German Shepherd Dogs",
+      "Retrievers (Golden)",
+      "Bulldogs",
+      "Cesky Terriers",
+      "American Foxhounds",
+      "Azawakhs",
+      "English Foxhounds",
+      "Norwegian Lundehounds"
+    )
+  )),
+  alpha = 0.5
+  )) +
   geom_col() +
   geom_point(size = 4,
              aes(
@@ -319,11 +337,14 @@ top5_bottom5 <- top5_bottom5 %>%
              )) + #light green
   xlim(min = 1, max = 5) +
   scale_alpha(guide = 'none') +
-  labs(title = 'Trait Category Scores for 5 Most Popular and 5 Least Popular Breeds',
-       subtitle = 'Based on 2020 Rankings',
-       x = 'Score') +
+  labs(
+    title = 'Trait Category Scores for 5 Most/Least Popular Breeds',
+    subtitle = 'Based on 2020 Rankings',
+    x = 'Score',
+    y = 'Breed'
+  ) +
   scale_color_manual(
-    name = 'Trait Groups',
+    name = 'Trait Category',
     breaks = c('Friendliness',
                'Upkeep',
                'Energy',
