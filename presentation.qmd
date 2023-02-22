@@ -22,6 +22,10 @@ library(tidyverse)
 library(tidymodels)
 library(palmerpenguins)
 library(gt)
+library(tidyr)
+library(gghighlight)
+library(directlabels)
+library(lubridate)
 ```
 
 ```{r}
@@ -96,7 +100,6 @@ glance(model)
 ```{r}
 #| label: lollipop-wrangling
 #| echo: false
-
 lollipop_data <- breed_full %>%
   filter((`2020 Rank` > 0 & `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
   select(-`2013 Rank`, -`2014 Rank`, -`2015 Rank`, -`2016 Rank`, -`2017 Rank`, -`2018 Rank`, -`2019 Rank`) %>%
@@ -115,11 +118,109 @@ colors <- c("Unpopular" = "#E97451", "Popular" = "#8ABD91")
 ```
 
 ```{r}
+#| label: lollipop-wrangling
+#| echo: false
+breed_traits <- breed_traits %>%
+  mutate(breed = Breed) %>%
+  select(-c(Breed))
+
+#use column bind to combine breed traits and rank dataset
+comb_df <-
+  bind_cols(breed_traits, breed_rank_all) %>% select(-c(breed)) %>% relocate(Breed)
+
+#create list of top 20 breeds
+t20 <- breed_rank_all %>%
+  tidyr::drop_na() %>%
+  mutate(popsum = rowSums(across(where(is.numeric)), na.rm = TRUE)) %>%
+  arrange(popsum) %>%
+  head(20)
+```
+
+```{r}
+#| label: lollipop-wrangling
+#| echo: false
+comb_df %>%
+  #filter for only top 20 years
+  filter(Breed %in% t20$Breed) %>%
+  #pivot so year can be a column in the dataset used for the plot
+  pivot_longer(
+    cols = c(`2013 Rank`:`2020 Rank`),
+    names_to = "Year",
+    values_to = "rank"
+  ) %>% mutate(Year = as.numeric(str_replace_all(Year, " Rank", "")), rank = as.numeric(rank))  %>%
+  group_by(Breed) %>%
+  #calculate range to feed to GGhighlight
+  mutate(range = (max(rank) - min(rank)), .groups  = "drop") %>%
+  ggplot(aes(x = Year, y = rank, color = Breed)) +
+  scale_x_continuous(
+    limits = c(2013, 2022),
+    labels = c(2013:2022),
+    breaks = c(2013:2022)
+  ) +
+  geom_line(show.legend = FALSE) +
+  #label each line with breed name
+  geom_dl(aes(label = Breed), method = list("last.points", cex = 0.65)) +
+  theme_minimal() +
+  #reverse y axis so that lower scores, which indicate higher popularity, will be on top
+  scale_y_reverse() +
+  gghighlight(
+    max(range) > 6,
+    use_direct_label = FALSE,
+    unhighlighted_params = list(linewidth = 0.5, colour = alpha("slategray", 0.7))
+  ) +
+  labs(title = "Popularity Rankings of 20 Top Dog Breeds Over Time", x = "Year", y = "Rank") + # remove gridlines
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank()) +
+  scale_color_viridis_d()
+```
+
+```{r}
+#| label: lollipop-wrangling
+#| echo: false
+comb_df %>%
+  filter(!is.na(`2013 Rank`) & !is.na(`2020 Rank`)) %>%
+  #create rankchange variable to determine differences between 2020 and 2013 rannks
+  mutate(rankchange = `2013 Rank` - `2020 Rank`) %>%
+  arrange(rankchange) %>%
+  #add row number variable
+  mutate(rnum = row_number()) %>%
+  #create binary variables to designate top 10 and bottom 10 breeds in terms of popularity change
+  mutate(bottom_10 = ifelse(rnum %in% seq (1, 10), 1, 0)) %>%
+  mutate(top_10 = ifelse(rnum %in% seq(n() - 10 + 1, n()), 1, 0)) %>%
+  select(-rnum) %>%
+  #for this plot, filter for only breeds that increased and decreased the most in popularity
+  filter(top_10 == 1 | bottom_10 == 1) %>%
+  mutate(
+    popchange = case_when(
+      top_10 == 1 ~ "10 most increased in Popularity",
+      bottom_10 == 1 ~ "10 most decreased in Popularity"
+    )
+  ) %>%
+  ggplot() +
+  geom_bar(aes(x = `Coat Type`, fill = `Coat Length`)) +
+  facet_wrap( ~ popchange) +
+  labs(title = "Coat Traits of Dog Breeds that Increased or Decreased in Popularity",
+       subtitle = "From 2013 to 2020",
+       y = "Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(
+    angle = 45,
+    vjust = 1.2,
+    hjust = 1 ), 
+    panel.grid.minor.x = element_blank(), 
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank()) + 
+  scale_fill_viridis_d(alpha = 0.9)
+```
+
+```{r}
 #| label: plot-lollipop
 #| echo: false
 #| warning: false
 #| fig-alt: |
 #|   Differences in Breed Traits Between Popular and Unpopular Dogs
+
+
 
 lollipop_data %>%
   pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
