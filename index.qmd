@@ -184,6 +184,8 @@ The second plot shows how traits vary across specific breeds. In this visualizat
 #| warning: false
 #| echo: false
 
+#Wrangling
+
 lollipop_data <- comb_df %>%
   filter((`2020 Rank` > 0 &
             `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
@@ -211,6 +213,8 @@ lollipop_data <- comb_df %>%
 
 colors <- c("Unpopular" = "#482677FF",
             "Popular" = "#20A387FF")
+
+#Graphing!
 
 lollipop_data %>%
   pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
