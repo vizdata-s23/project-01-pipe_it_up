@@ -176,7 +176,6 @@ Our first plot addressing this question is a variation on a lollipop plot. To ma
 
 The second plot shows how traits vary across specific breeds. In this visualization, the 5 most popular and least popular dog breeds of 2020 are . To create this , the 14 traits in the first plot were grouped into four categories: friendliness, upkeep, energy, and trainability. Then, the average of the scores for each of the traits was d. The second plot affirms our initial observations from the first plot that there are large disparities in popular and unpopular dogs when it comes to traits such as trainplayfulness,
 
-
 ### Analysis
 
 ```{r}
@@ -210,8 +209,8 @@ lollipop_data <- comb_df %>%
     `Min Score` = min(Score)
   )
 
-colors <- c("Unpopular" = "#E97451",
-            "Popular" = "#8ABD91")
+colors <- c("Unpopular" = "#482677FF",
+            "Popular" = "#20A387FF")
 
 lollipop_data %>%
   pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
@@ -255,6 +254,7 @@ lollipop_data %>%
     x = "Average Score",
     color = "Popularity"
   ) +
+  scale_x_continuous(limits = c(1, 5), breaks = c(1, 2, 3, 4, 5)) +
   theme_minimal()
 
 ```
@@ -343,4 +343,4 @@ top5_bottom5 <- top5_bottom5 %>%
 
 ### Discussion
 
-(1-3 paragraphs): In the Discussion section, interpret the results of your analysis. Identify any trends revealed (or not revealed) by the plots. Speculate about why the data looks the way it does.
+The traits with the greatest difference between popular and unpopular dogs were trainability, barking level, playfulness, and openness to strangers in that order. In particular, popular dogs rated more highly on trainability, playfulness, and openness to strangers, while unpopular dogs rated higher on barking level. Thus, the visualizations suggest that these four traits may be important in determining dog popularity. However, it is important to note that there was a moderate amount of variability in the data. Thus, while popular dogs score, on average, higher in trainability, playfulness, and openness to strangers, a particular popular dog breed may not necessarily be more trainable, playful, or open to strangers than an unpopular dog breed. 

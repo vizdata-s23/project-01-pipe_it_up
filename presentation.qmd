@@ -170,6 +170,7 @@ comb_df %>%
 #| label: q2a
 #| echo: false
 #| fig.width: 8
+
 lollipop_data <- comb_df %>%
   filter((`2020 Rank` > 0 &
             `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
