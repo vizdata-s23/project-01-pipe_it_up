@@ -56,7 +56,7 @@ breed_full <- cbind(breed_rank_all, breed_traits2)
 
 ## Introduction
 
-In our presentation we will focus on analyzing the Dog Breeds dataset from the American Kennel Club. We will focus on analyzing and visualizing the following aspects:
+In our presentation we will analyze the Dog Breeds dataset from the American Kennel Club. We will focus on analyzing and visualizing the following aspects:
 
 -   Dog breed popularity over time
 
