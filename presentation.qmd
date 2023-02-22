@@ -11,10 +11,12 @@ editor: visual
 execute:
   echo: false
 ---
-
+ 
 ```{r}
 #| label: load-packages
 #| include: false
+#| warning: false
+#| message: false
 
 # Add any additional packages you need to this chunk
 # Remove any packages from this list that you're not using
@@ -31,6 +33,8 @@ library(lubridate)
 ```{r}
 #| label: setup
 #| include: false
+#| warning: false
+#| message: false
 
 # For better figure resolution
 knitr::opts_chunk$set(
@@ -45,6 +49,8 @@ knitr::opts_chunk$set(
 ```{r}
 #| label: load-data
 #| include: false
+#| warning: false
+#| message: false
 
 breed_traits <- read_csv("data/breed_traits.csv")
 breed_traits2 <- read_csv("data/breed_traits.csv") %>%
@@ -69,6 +75,9 @@ In our presentation we will analyze the Dog Breeds dataset from the American Ken
 ```{r}
 #| label: q1a
 #| echo: false
+#| warning: false
+#| message: false
+
 #rename breed variable to allow column bind
 breed_traits <- breed_traits %>%
   mutate(breed = Breed) %>%
@@ -125,6 +134,9 @@ comb_df %>%
 ```{r}
 #| label: q1b
 #| echo: false
+#| warning: false
+#| message: false
+
 comb_df %>%
   filter(!is.na(`2013 Rank`) & !is.na(`2020 Rank`)) %>%
   #create rankchange variable to determine differences between 2020 and 2013 rannks
@@ -170,6 +182,9 @@ comb_df %>%
 #| label: q2a
 #| echo: false
 #| fig.width: 8
+#| warning: false
+#| message: false
+
 
 lollipop_data <- comb_df %>%
   filter((`2020 Rank` > 0 &
@@ -251,6 +266,9 @@ lollipop_data %>%
 #| label: q2b
 #| echo: false
 #| fig.width: 8
+#| warning: false
+#| message: false
+
 
 top5_bottom5 <- rbind(comb_df[1:5, ], comb_df[191:195, ])
 top5_bottom5$x <- 5
