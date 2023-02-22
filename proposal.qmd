@@ -1,6 +1,5 @@
 ---
-title: "Project 1: 
-Visualizing How Dog Breed Traits Contribute to Popularity Rankings"
+title: "Project 1: Visualizing How Dog Breed Traits Contribute to Popularity Rankings"
 subtitle: "Proposal"
 format: html
 editor: visual
