@@ -210,12 +210,12 @@ lollipop_data %>%
 
 ```
 
-```{r}
+```{r warning = FALSE}
+
 top5_bottom5 <- rbind(comb_df[1:5,], comb_df[191:195,])
 top5_bottom5$x <- 5
 top5_bottom5$y <- rev(seq(10:1))
 top5_bottom5$xbegin <- 0
-
 
 top5_bottom5 <- top5_bottom5 %>%
   mutate(friendliness = (`Affectionate With Family` + `Good With Young Children` + `Good With Other Dogs` + `Openness To Strangers` + `Playfulness Level`)/5) %>%
@@ -223,9 +223,7 @@ top5_bottom5 <- top5_bottom5 %>%
   mutate(trainability = (`Trainability Level` + `Adaptability Level`)/2) %>%
   mutate(energy = (`Energy Level` + `Mental Stimulation Needs` + `Barking Level`)/3)
 
-```
 
-```{r warning = FALSE}
 ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) + 
   geom_col() +  
   geom_segment(aes(x = xbegin, y = y, xend = x, yend = y)) + 
