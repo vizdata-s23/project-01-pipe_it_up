@@ -56,6 +56,14 @@ breed_full <- cbind(breed_rank_all, breed_traits2)
 
 ## Introduction
 
+In our presentation we will focus on analyzing the Dog Breeds dataset from the American Kennel Club. We will focus on analyzing and visualizing the following aspects:
+
+-   Dog breed popularity over time
+
+-   Coat traits differences between most popular and least popular dog breeds
+
+-   Average dog breed trait scores and trait groups in popular and unpopular dog breeds
+
 ## Popularity Ranking of the Top 20 Breeds
 
 ```{r}
