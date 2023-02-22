@@ -271,59 +271,66 @@ top5_bottom5 <- top5_bottom5 %>%
            3)
 
 
-ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
+  ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
   geom_col() +
-  geom_segment(aes(
-    x = xbegin,
-    y = y,
-    xend = x,
-    yend = y
-  )) +
-  geom_point(size = 4, aes(
-    x = friendliness,
-    y = y,
-    color = 'pink',
-    shape = 'circle'
-  )) +
+  geom_point(size = 4,
+             aes(
+               x = friendliness,
+               y = y,
+               color = 'Friendliness',
+               shape = 'Friendliness'
+             )) + #dark green
   geom_point(size = 4, aes(
     x = upkeep,
     y = y,
-    color = 'darkorange',
-    shape = 'square'
-  )) +
-  geom_point(size = 4,
-             aes(
-               x = energy,
-               y = y,
-               color = 'steelblue2',
-               shape = 'triangle'
-             )) +
+    color = 'Upkeep',
+    shape = 'Upkeep'
+  )) + #yellow
+  geom_point(size = 4, aes(
+    x = energy,
+    y = y,
+    color = 'Energy',
+    shape = 'Energy'
+  )) + #purple
   geom_point(size = 4,
              aes(
                x = trainability,
                y = y,
-               color = 'tomato',
-               shape = 'diamond'
-             )) +
+               color = 'Trainability',
+               shape = 'Trainability'
+             )) + #light green
   xlim(min = 1, max = 5) +
   scale_alpha(guide = 'none') +
-  labs(title = 'Trait Scores for 5 Most Popular and 5 Least Popular Breeds',
+  labs(title = 'Trait Category Scores for 5 Most Popular and 5 Least Popular Breeds',
        subtitle = 'Based on 2020 Rankings',
        x = 'Score') +
   scale_color_manual(
     name = 'Trait Groups',
+    breaks = c('Friendliness',
+               'Upkeep',
+               'Energy',
+               'Trainability'),
     values = c(
-      'pink' = 'pink',
-             'darkorange' = 'darkorange',
-             'steelblue2' = 'steelblue2',
-             'tomato' = 'tomato'
-    ),
-    labels = c('Friendliness', 'Upkeep', 'Energy', 'Trainability')
+      'Friendliness' = '#2a788e',
+      'Upkeep' = '#fde725',
+      'Energy' = '#440154',
+      'Trainability' = '#7ad151'
+    )
   ) +
   scale_shape_manual(
-    name = "Trait Groups",
-    values = c('circle', 'square', 'triangle', 'diamond'),
-    labels = c('Friendliness', 'Upkeep', 'Energy', 'Trainability')
+    name = 'Trait Category',
+    breaks = c('Friendliness',
+               'Upkeep',
+               'Energy',
+               'Trainability'),
+    values = c(
+      'Friendliness' = 'circle',
+      'Upkeep' = 'square',
+      'Energy' = 'triangle',
+      'Trainability' = 'diamond'
+    )
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
 ```
