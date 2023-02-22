@@ -165,7 +165,9 @@ To answer this question, we focused primarily on traits that are ranked 1-5 in t
 
 ### Approach
 
-Our first plot addressing this question is a variation on a lollipop plot. To make this plot, the top 10 most popular and unpopular dogs of 2020 were identified. Their average trait scores were graphed with color used to differentiate between popular and unpopular dogs. In this plot, the \"stem\" of the lollipop connects the average trait score between the popular and unpopular breeds. This was done because the focus of this plot was to identify differences in trait scores between popular and unpopular dogs. The length of this stem helps to represent these differences, with longer stems representing greater differences. Additionally, while it was suggested that we include a measure of variance in the plot, it was decided that the error bars cluttered the graph up too much, making it hard to see the differences in trait score. 
+Our first plot addressing this question is a variation on a lollipop plot. To make this plot, the top 10 most popular and unpopular dogs of 2020 were identified. Their average trait scores were graphed with color used to differentiate between popular and unpopular dogs. In this plot, the "stem" of the lollipop connects the average trait score between the popular and unpopular breeds. This was done because the focus of this plot was to identify differences in trait scores between popular and unpopular dogs. The length of this stem helps to represent these differences, with longer stems representing greater differences. Additionally, while it was suggested that we include a measure of variance in the plot, it was decided that the error bars cluttered the graph up too much, making it hard to see the differences in trait score. 
+
+The second plot shows how traits vary across specific breeds. In this visualization, the 5 most popular and least popular dog breeds of 2020 are . To create this , the 14 traits in the first plot were grouped into four categories: friendliness, upkeep, energy, and trainability. Then, the average of the scores for each of the traits was d. The second plot affirms our initial observations from the first plot that there are large disparities in popular and unpopular dogs when it comes to traits such as trainplayfulness,
 
 \
 Analysis
@@ -205,6 +207,43 @@ lollipop_data %>%
        x = "Average Score",
        color = "Popularity") +
   theme_minimal()
+
+```
+
+```{r}
+top5_bottom5 <- rbind(comb_df[1:5,], comb_df[191:195,])
+top5_bottom5$x <- 5
+top5_bottom5$y <- rev(seq(10:1))
+top5_bottom5$xbegin <- 0
+
+
+top5_bottom5 <- top5_bottom5 %>%
+  mutate(friendliness = (`Affectionate With Family` + `Good With Young Children` + `Good With Other Dogs` + `Openness To Strangers` + `Playfulness Level`)/5) %>%
+  mutate(upkeep = (`Shedding Level` + `Coat Grooming Frequency` + `Drooling Level`)/3) %>%
+  mutate(trainability = (`Trainability Level` + `Adaptability Level`)/2) %>%
+  mutate(energy = (`Energy Level` + `Mental Stimulation Needs` + `Barking Level`)/3)
+
+```
+
+```{r warning = FALSE}
+ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) + 
+  geom_col() +  
+  geom_segment(aes(x = xbegin, y = y, xend = x, yend = y)) + 
+  geom_point(size = 4, aes(x = friendliness, y = y, color = 'pink', shape = 'circle')) +
+  geom_point(size = 4, aes(x = upkeep, y = y, color = 'darkorange', shape = 'square')) +
+  geom_point(size = 4, aes(x = energy, y = y, color = 'steelblue2', shape = 'triangle')) +
+  geom_point(size = 4, aes(x = trainability, y = y, color = 'tomato', shape = 'diamond')) +
+  xlim(min = 1, max = 5) +
+  scale_alpha(guide = 'none') +
+  labs(title = 'Trait Scores for 5 Most Popular and 5 Least Popular Breeds', subtitle = 'Based on 2020 Rankings', x = 'Score') +
+  scale_color_manual(name = 'Trait Groups', 
+                     values =c('pink'='pink','darkorange'='darkorange', 'steelblue2'='steelblue2', 'tomato'='tomato'), 
+                     labels = c('Friendliness','Upkeep','Energy','Trainability')) +
+  scale_shape_manual(name = "Trait Groups",
+                     values = c('circle', 'square', 'triangle', 'diamond'),
+                     labels = c('Friendliness','Upkeep','Energy','Trainability')) +
+  theme_minimal()
+
 ```
 
 ### Discussion
