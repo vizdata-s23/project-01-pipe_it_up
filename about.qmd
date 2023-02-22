@@ -9,4 +9,4 @@ This project was developed by **\[team name\]** For [STA/ISS 313: Advanced Data 
 -   Team member 1: Anna Zolotor is a senior with an interdepartmental major in statistics and biology.
 -   Team member 2: Eddie Chen is a senior majoring in statistics and minoring in math and finance.
 -   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).
--   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
+-   Team member 4: Othmane Bahraoui is a senior majoring in data science.
