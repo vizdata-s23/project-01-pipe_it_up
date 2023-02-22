@@ -81,7 +81,7 @@ In our analysis, we asked questions about:
 #| echo: false
 #| warning: false
 #| message: false
-
+#| fig.width: 8
 #rename breed variable to allow column bind
 breed_traits <- breed_traits %>%
   mutate(breed = Breed) %>%
