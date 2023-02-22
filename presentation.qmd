@@ -56,7 +56,7 @@ breed_full <- cbind(breed_rank_all, breed_traits2)
 
 ## Introduction
 
-## Question 1a: 
+## Popularity Ranking of the Top 20 Breeds
 
 ```{r}
 #| label: q1a
@@ -112,7 +112,7 @@ comb_df %>%
   scale_color_viridis_d()
 ```
 
-## Question 1b: 
+## Popularity of Coat Traits in Dog Breeds
 
 ```{r}
 #| label: q1b
@@ -156,7 +156,7 @@ comb_df %>%
   scale_fill_viridis_d(alpha = 0.9)
 ```
 
-## Question 2a: 
+## Average Dog Breed Trait Scores
 
 ```{r}
 #| label: q2a
@@ -234,7 +234,7 @@ lollipop_data %>%
   theme_minimal()
 ```
 
-## Question 2b:
+## Trait Scores of different Dog Breeds
 
 ```{r}
 #| label: q2b
@@ -314,4 +314,3 @@ ggplot(top5_bottom5, aes(x = xbegin, y = Breed, alpha = 0.5)) +
   ) +
   theme_minimal()
 ```
-
