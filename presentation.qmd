@@ -1,5 +1,5 @@
 ---
-title: "Visualizing the relationship between dog traits and breed popularity"
+title: "Visualizing the Relationship Between Dog Traits and Breed Popularity"
 subtitle: "STA/ISS 313 - Spring 2023 - Project 1"
 author: "Pipe it Up"
 title-slide-attributes:
@@ -169,6 +169,7 @@ comb_df %>%
 ```{r}
 #| label: q2a
 #| echo: false
+#| fig.width: 8
 lollipop_data <- comb_df %>%
   filter((`2020 Rank` > 0 &
             `2020 Rank` <= 10) | (`2020 Rank` > 185 & `2020 Rank` <= 195)) %>%
@@ -194,8 +195,8 @@ lollipop_data <- comb_df %>%
     `Min Score` = min(Score)
   )
 
-colors <- c("Unpopular" = "#E97451",
-            "Popular" = "#8ABD91")
+colors <- c("Unpopular" = "#482677FF",
+            "Popular" = "#20A387FF")
 
 lollipop_data %>%
   pivot_wider(names_from = popularity, values_from = contains("Score")) %>%
@@ -239,14 +240,17 @@ lollipop_data %>%
     x = "Average Score",
     color = "Popularity"
   ) +
+  scale_x_continuous(limits = c(1, 5), breaks = c(1, 2, 3, 4, 5)) +
   theme_minimal()
 ```
 
-## Trait Scores of different Dog Breeds
+## Trait Scores of Different Dog Breeds
 
 ```{r}
 #| label: q2b
 #| echo: false
+#| fig.width: 8
+
 top5_bottom5 <- rbind(comb_df[1:5, ], comb_df[191:195, ])
 top5_bottom5$x <- 5
 top5_bottom5$y <- rev(seq(10:1))
